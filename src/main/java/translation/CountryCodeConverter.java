@@ -71,7 +71,7 @@ public class CountryCodeConverter {
      */
     public String fromCountry(String country) {
         // TODO Task B: update this code to use an instance variable to return the correct value
-        return countryCodeToCountry.get(country);
+        return countryToCountryCode.get(country);
     }
 
     /**
