@@ -19,6 +19,7 @@ public class GUI {
             languagePanel.add(new JLabel("Language:"), 0);
             Translator translator = new JSONTranslator();
             LanguageCodeConverter langConverter = new LanguageCodeConverter();
+            CountryCodeConverter countryConverter = new CountryCodeConverter();
 
             JComboBox<String> languageComboBox = new JComboBox<>();
             for(String languageCode : translator.getLanguageCodes()) {
@@ -26,22 +27,10 @@ public class GUI {
             }
             languagePanel.add(languageComboBox);
 
-            languageComboBox.addItemListener(new ItemListener() {
-                @Override
-                public void itemStateChanged(ItemEvent e) {
 
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        String languageSelection = languageComboBox.getSelectedItem().toString();
-                        JOptionPane.showMessageDialog(null, "user selected " + languageSelection + "!");
-                    }
-                }
-
-
-            });
 
             // country menu
             JPanel countryPanel = new JPanel();
-            CountryCodeConverter countryConverter = new CountryCodeConverter();
             String[] countries = new String[countryConverter.getNumCountries()];
             int i = 0;
             for (String countryCode: translator.getCountryCodes()) {
@@ -53,6 +42,22 @@ public class GUI {
             countryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             JScrollPane countryScrollPane = new JScrollPane(countryList);
             countryPanel.add(countryScrollPane, 0);
+
+            languageComboBox.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(ItemEvent e) {
+
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        String selectedCountry = countryList.getSelectedValue();
+                        String languageSelection = languageComboBox.getSelectedItem().toString();
+                        String languageCode = langConverter.fromLanguage(languageComboBox.getSelectedItem().toString());
+                        String countryCode = countryConverter.fromCountry(selectedCountry);
+                        resultLabel.setText("\t\t\t\t\t\t\t" + translator.translate(countryCode, languageCode));
+                    }
+                }
+
+
+            });
 
             countryList.addListSelectionListener(new ListSelectionListener() {
                 @Override
