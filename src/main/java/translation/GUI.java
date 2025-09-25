@@ -7,12 +7,6 @@ public class GUI {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JPanel countryPanel = new JPanel();
-            JTextField countryField = new JTextField(10);
-            countryField.setText("can");
-            countryField.setEditable(false); // we only support the "can" country code for now
-            countryPanel.add(new JLabel("Country:"));
-            countryPanel.add(countryField);
 
             //dropdown
             JPanel languagePanel = new JPanel();
@@ -39,6 +33,20 @@ public class GUI {
 
             });
 
+            // country menu
+            JPanel countryPanel = new JPanel();
+            CountryCodeConverter countryConverter = new CountryCodeConverter();
+            String[] countries = new String[countryConverter.getNumCountries()];
+            int i = 0;
+            for (String countryCode: translator.getCountryCodes()) {
+                countries[i] = countryConverter.fromCountryCode(countryCode);
+                i++;
+            }
+
+            JList<String> countryList = new JList<>(countries);
+            countryList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            JScrollPane countryScrollPane = new JScrollPane(countryList);
+            countryPanel.add(countryScrollPane, 0);
 
             JPanel buttonPanel = new JPanel();
             JButton submit = new JButton("Submit");
